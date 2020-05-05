@@ -1,3 +1,27 @@
+# Steps to reproduce attempts to use wishbone-tool
+
+1. Generate & load the bitstream
+```
+./litex/boards/targets/arty.py --uart-name crossover --build --load
+```
+
+2. Try to write something to the memory:
+```
+wishbone-tool --serial /dev/ttyUSB1 --baud 115200 0x10000000 0x12345678
+```
+
+3. Try to read the memory:
+```
+wishbone-tool --serial /dev/ttyUSB1 --baud 115200 0x10000000
+```
+
+Output:
+```
+╰─$ ./wishbone-tool --serial /dev/ttyUSB1 --baud 115200 0x10000000
+INFO [wishbone_tool::bridge::uart] Re-opened serial device /dev/ttyUSB1
+Value at 10000000: ffffffff
+```
+
 <p align="center"><img src="https://raw.githubusercontent.com/enjoy-digital/litex/master/doc/litex.png"></p>
 
 ```
