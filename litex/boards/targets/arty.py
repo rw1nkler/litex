@@ -12,6 +12,7 @@ from litex.boards.platforms import arty
 from litex.build.xilinx.vivado import vivado_build_args, vivado_build_argdict
 
 from litex.soc.cores.clock import *
+from litex.soc.cores.uart import *
 from litex.soc.integration.soc_core import *
 from litex.soc.integration.soc_sdram import *
 from litex.soc.integration.builder import *
@@ -77,6 +78,14 @@ class BaseSoC(SoCCore):
                 l2_cache_min_data_width = kwargs.get("min_l2_data_width", 128),
                 l2_cache_reverse        = True
             )
+
+        # Bridge for wishboone-tool   --------------------------------------------------------------
+
+        self.submodules.uart_bridge = UARTWishboneBridge(
+            platform.request("serial"),
+            sys_clk_freq,
+            baudrate=115200)
+        self.add_wb_master(self.uart_bridge.wishbone)
 
         # Ethernet ---------------------------------------------------------------------------------
         if with_ethernet:
