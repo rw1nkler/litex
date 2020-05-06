@@ -81,11 +81,15 @@ class BaseSoC(SoCCore):
 
         # Bridge for wishboone-tool   --------------------------------------------------------------
 
+        # Uart Bridge
         self.submodules.uart_bridge = UARTWishboneBridge(
             platform.request("serial"),
             sys_clk_freq,
             baudrate=115200)
         self.add_wb_master(self.uart_bridge.wishbone)
+
+        # Debug Memory
+        self.register_mem("vexriscv_debug", 0xf00f0000, self.cpu.debug_bus, 0x10)
 
         # Ethernet ---------------------------------------------------------------------------------
         if with_ethernet:
